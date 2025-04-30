@@ -1,21 +1,21 @@
 {
-  "name": "Калькулятор маржи",
-  "version": "1.0.0",
-  "description": "Калькулятор маржи для сделок",
-  "type": "iframe",
-  "url": "https://bitrix-margin-calculator.vercel.app",
-  "application": {
-    "placement": [
-      {
-        "placement": "CRM_DEAL_DETAIL_TAB",
-        "handler": "https://bitrix-margin-calculator.vercel.app",
-        "title": "Калькулятор маржи"
-      }
-    ]
-  },
-  "lang": {
-    "ru": {
-      "NAME": "Калькулятор маржи"
+    "name": "Калькулятор маржи",
+    "version": "1.0.0",
+    "description": "Калькулятор маржи для сделок",
+    "type": "iframe",
+    "url": "https://dirtykaban.github.io/bitrix-margin-calculator/",
+    "application": {
+        "placement": [
+            {
+                "placement": "CRM_DEAL_DETAIL_TAB",
+                "handler": "https://dirtykaban.github.io/bitrix-margin-calculator/",
+                "title": "Калькулятор маржи"
+            }
+        ]
+    },
+    "lang": {
+        "ru": {
+            "NAME": "Калькулятор маржи"
+        }
     }
-  }
 }
