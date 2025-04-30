@@ -1,0 +1,80 @@
+﻿
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Калькулятор маржи</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        label, select, input {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h2>Калькулятор маржи</h2>
+
+    <label>Сумма от заказчика (с НДС):</label>
+    <input type="number" id="clientAmount" placeholder="Например, 120000" />
+
+    <label>НДС у заказчика:</label>
+    <select id="clientVatRate">
+        <option value="20">20%</option>
+        <option value="10">10%</option>
+        <option value="7">7%</option>
+        <option value="5">5%</option>
+        <option value="0">Без НДС</option>
+    </select>
+
+    <label>Сумма перевозчику:</label>
+    <input type="number" id="carrierAmount" placeholder="Например, 85000" />
+
+    <label>НДС у перевозчика:</label>
+    <select id="carrierVatRate">
+        <option value="20">20%</option>
+        <option value="10">10%</option>
+        <option value="7">7%</option>
+        <option value="5">5%</option>
+        <option value="0">Без НДС</option>
+    </select>
+
+    <button onclick="calculateMargin()">Рассчитать</button>
+
+    <div class="result" id="resultBox"></div>
+
+    <script>
+        function calculateMargin() {
+            const clientAmount = parseFloat(document.getElementById("clientAmount").value);
+            const carrierAmount = parseFloat(document.getElementById("carrierAmount").value);
+            const clientVat = parseFloat(document.getElementById("clientVatRate").value);
+            const carrierVat = parseFloat(document.getElementById("carrierVatRate").value);
+
+            if (isNaN(clientAmount) || isNaN(carrierAmount)) {
+                document.getElementById("resultBox").innerText = "Введите корректные суммы.";
+                return;
+            }
+
+            const clientNet = clientVat === 0 ? clientAmount : clientAmount - (clientAmount * clientVat / (100 + clientVat));
+            const carrierNet = carrierVat === 0 ? carrierAmount : carrierAmount - (carrierAmount * carrierVat / (100 + carrierVat));
+            const margin = clientNet - carrierNet;
+
+            document.getElementById("resultBox").innerHTML =
+                `<strong>Маржа перевозки:</strong> ${margin.toFixed(2)} ₽<br />
+             <small>(Чистый приход заказчика: ${clientNet.toFixed(2)} ₽, Чистый расход: ${carrierNet.toFixed(2)} ₽)</small>`;
+        }
+    </script>
+</body>
+</html>
