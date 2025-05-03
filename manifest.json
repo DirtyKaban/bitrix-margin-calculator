@@ -1,14 +1,14 @@
 
 {
     "name": "Калькулятор маржи",
-    "version": "1.1.2",
-    "description": "Калькулятор маржи с BX24.getPlacementOptions",
-    "type": "server",
+    "version": "1.2.0",
+    "description": "Bitrix iframe-приложение с загрузкой из GitHub Pages",
+    "type": "iframe",
     "application": {
         "placement": [
             {
                 "placement": "CRM_DEAL_DETAIL_TAB",
-                "handler": "index.html",
+                "handler": "https://dirtykaban.github.io/bitrix-margin-calculator/index.html?deal_id=#ID#",
                 "title": "Калькулятор маржи"
             }
         ]
