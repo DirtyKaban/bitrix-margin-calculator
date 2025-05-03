@@ -76,5 +76,87 @@
              <small>(Чистый приход заказчика: ${clientNet.toFixed(2)} ₽, Чистый расход: ${carrierNet.toFixed(2)} ₽)</small>`;
         }
     </script>
+
+<button onclick="loadDealData()">Загрузить из сделки</button>
+<p id="dealStatus" style="color: red;"></p>
+
+<script>
+async function loadDealData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const dealId = urlParams.get('deal_id');
+
+    if (!dealId) {
+        document.getElementById("dealStatus").innerText = "ID сделки не найден. Откройте приложение из карточки сделки.";
+        return;
+    }
+
+    document.getElementById("dealStatus").innerText = "Загрузка данных...";
+
+    try {
+        const response = await fetch("https://b-s-l.bitrix24.ru/rest/20/szpqcc8xp5ek5t5i/crm.deal.get.json", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ ID: dealId })
+        });
+
+        const result = await response.json();
+
+        if (result && result.result) {
+            document.getElementById("dealStatus").innerText = "Данные сделки успешно загружены.";
+            window.dealData = result.result;
+            console.log("Данные сделки:", result.result);
+            // Здесь позже можно добавить сопоставление с полями формы
+        } else {
+            document.getElementById("dealStatus").innerText = "Ошибка загрузки данных сделки.";
+        }
+    } catch (error) {
+        document.getElementById("dealStatus").innerText = "Сетевая ошибка при загрузке данных.";
+        console.error(error);
+    }
+}
+</script>
+
+
+<script>
+function loadDealData() {
+    document.getElementById("dealStatus").innerText = "Загрузка данных из сделки...";
+
+    if (typeof BX24 === "undefined") {
+        document.getElementById("dealStatus").innerText = "Интерфейс BX24 недоступен. Откройте приложение из сделки Bitrix24.";
+        return;
+    }
+
+    BX24.init(function() {
+        BX24.getPlacementOptions(function(options) {
+            const dealId = options.ID || options.ENTITY_ID;
+            if (!dealId) {
+                document.getElementById("dealStatus").innerText = "ID сделки не найден через BX24.";
+                return;
+            }
+
+            fetch("https://b-s-l.bitrix24.ru/rest/20/szpqcc8xp5ek5t5i/crm.deal.get.json", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ ID: dealId })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result && result.result) {
+                    document.getElementById("dealStatus").innerText = "Данные сделки успешно загружены.";
+                    window.dealData = result.result;
+                    console.log("Данные сделки через BX24:", result.result);
+                } else {
+                    document.getElementById("dealStatus").innerText = "Ошибка при загрузке сделки.";
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById("dealStatus").innerText = "Ошибка сети при запросе сделки.";
+            });
+        });
+    });
+}
+</script>
+
 </body>
 </html>
